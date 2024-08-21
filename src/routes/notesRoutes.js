@@ -10,8 +10,10 @@ const {
 const { validateNote, validateId } = require("../middleware/validator");
 const logger = require("../middleware/logger");
 
+// using the logger before every request
 router.use(logger);
 
+// router with the http methods linked with the functions in the controller
 router.get("/", getNotes);
 router.get("/:id", validateId, getNotesById);
 router.post("/", validateNote, createNote);

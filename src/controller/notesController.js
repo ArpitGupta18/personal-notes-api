@@ -1,18 +1,15 @@
+// import required modules
 const fs = require("fs");
 const path = require("path");
 const dbPath = path.join(__dirname, "../../data/db.json");
 let db = require(dbPath);
 
-// console.log(dbPath);
-// console.log(db);
-// console.log(JSON.stringify(db, null, 4));
-// console.log(db.notes);
-// console.log(db.notes.find((n) => n.id == 1));
-
+// save changes to the data made to the db.json file
 const saveToDb = () => {
 	fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
 };
 
+// gets all note from db.json
 const getNotes = (req, res) => {
 	try {
 		res.status(200).json(db.notes);
@@ -21,6 +18,7 @@ const getNotes = (req, res) => {
 	}
 };
 
+// gets a specific note based on id
 const getNotesById = (req, res) => {
 	const notes = db.notes.find((note) => note.id == req.params.id);
 
@@ -31,6 +29,7 @@ const getNotesById = (req, res) => {
 	}
 };
 
+// adds a new note to db.json
 const createNote = (req, res) => {
 	const { title, content } = req.body;
 	const newNote = {};
@@ -42,6 +41,7 @@ const createNote = (req, res) => {
 	res.status(201).json(newNote);
 };
 
+// updates an existing note based on id
 const updateNote = (req, res) => {
 	const noteIndex = db.notes.findIndex((note) => note.id == req.params.id);
 	const { title, content } = req.body;
@@ -61,6 +61,7 @@ const updateNote = (req, res) => {
 	}
 };
 
+// deletes an existing note based on id
 const deleteNote = (req, res) => {
 	const originalLength = db.notes.length;
 	db.notes = db.notes.filter((note) => note.id != req.params.id);
@@ -72,4 +73,5 @@ const deleteNote = (req, res) => {
 	}
 };
 
+// exporting all the functions to use it in another file
 module.exports = { getNotes, getNotesById, createNote, updateNote, deleteNote };
